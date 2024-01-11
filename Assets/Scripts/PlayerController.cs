@@ -7,8 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    Vector3[] LEVELS_COORDS = { new(-66, 22, -315), new(-50, 12, -20), new(0, 0, 0), new(-100, 72, 740), new(0, 0, 0), new(0, 0, 0) };
-    Vector3[] LEVELS_ROTATIONS = { new(0, 90, 0), new(0, 90, 0), new(0, 90, 0), new(0, 90, 0), new(0, 90, 0), new(0, 90, 0) };
+    Vector3[] LEVELS_COORDS = { new(-66, 22, -315), new(-50, 12, -20), new(80, 28, 342), new(-100, 72, 740), new(0, 0, 0), new(0, 0, 0) };
+    Vector3[] LEVELS_ROTATIONS = { new(0, 90, 0), new(0, 90, 0), new(0, -107, 0), new(0, 90, 0), new(0, 90, 0), new(0, 90, 0) };
 
     public Camera playerCamera;
     public float walkSpeed = 6.0f;
