@@ -7,8 +7,10 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    Vector3[] LEVELS_COORDS = { new(-66, 22, -315), new(-50, 12, -20), new(80, 28, 342), new(-100, 72, 740), new(0, 0, 0), new(0, 0, 0) };
+    Vector3[] LEVELS_COORDS = { new(-66, 22, -315), new(-50, 12, -20), new(80, 28, 342), new(-100, 72, 740), new(-100, 3, 1210), new(0, 0, 0) };
     Vector3[] LEVELS_ROTATIONS = { new(0, 90, 0), new(0, 90, 0), new(0, -107, 0), new(0, 90, 0), new(0, 90, 0), new(0, 90, 0) };
+
+    Vector3[] TOWER_EIFFEL_COORDS = { new(-34, 44, 1210), new(-10, 182, 1210) };
 
     public Camera playerCamera;
     public float walkSpeed = 6.0f;
@@ -24,12 +26,28 @@ public class PlayerController : MonoBehaviour
     public bool canMove = true;
     CharacterController characterController;
 
+
+    //Coins collection
+    private int Coin = 0;
+
+    // Number of coins for each level
+    private int[] levelCoins = { 6, 5, 7, 12, 9, 1 };
+
+    private int[] towerEiffelLevelsCoins = { 1, 5, 9 };
+
+
+    private int currentLevel = 1;
+    private int currentTowerLevel = 0;
+
+
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        TeleportPlayerToLevel(0);
     }
 
     // Update is called once per frame
@@ -80,6 +98,39 @@ public class PlayerController : MonoBehaviour
                 TeleportPlayerToLevel(i - 1);
             }
         }
+
+
+        // Check if all coins for the current level are collected
+        if (Coin >= levelCoins[currentLevel-1])
+        {
+            Coin = 0; // Reset coin count for the next level
+
+            // Check if there is a next level
+            if (currentLevel < LEVELS_COORDS.Length)
+            {
+                currentLevel++;
+                TeleportPlayerToLevel(currentLevel-1);
+                
+                Debug.Log("Player moved to Level " + (currentLevel));
+            }
+            else
+            {
+                Debug.Log("All levels completed!");
+            }
+        }
+        
+
+        if(currentLevel == 5 && currentTowerLevel == 0 && Coin == towerEiffelLevelsCoins[currentTowerLevel])
+        {
+            TeleportPlayerToLevelEiffel(currentTowerLevel);
+            currentTowerLevel++;
+        }
+
+        if (currentLevel == 5 && currentTowerLevel == 1 && Coin == towerEiffelLevelsCoins[currentTowerLevel])
+        {
+            TeleportPlayerToLevelEiffel(currentTowerLevel);
+            currentTowerLevel++;
+        }
     }
 
     void TeleportPlayerToLevel(int level)
@@ -87,5 +138,22 @@ public class PlayerController : MonoBehaviour
         var coords = LEVELS_COORDS[level];
         var rotation = LEVELS_ROTATIONS[level];
         transform.SetPositionAndRotation(coords, Quaternion.Euler(rotation));
+    }
+
+    void TeleportPlayerToLevelEiffel(int level)
+    {
+        var coords = TOWER_EIFFEL_COORDS[level];
+        Vector3 rotation = new Vector3(0, 90, 0);
+        transform.SetPositionAndRotation(coords, Quaternion.Euler(rotation));
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.tag == "Coin")
+        {
+            Coin++;
+            Debug.Log(Coin);
+            Destroy(other.gameObject);
+        }
     }
 }
