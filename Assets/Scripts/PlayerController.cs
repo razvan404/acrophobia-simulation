@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,8 +8,8 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    Vector3[] LEVELS_COORDS = { new(-66, 22, -315), new(-50, 12, -20), new(80, 28, 342), new(-100, 72, 740), new(-100, 3, 1210), new(0, 0, 0) };
-    Vector3[] LEVELS_ROTATIONS = { new(0, 90, 0), new(0, 90, 0), new(0, -107, 0), new(0, 90, 0), new(0, 90, 0), new(0, 90, 0) };
+    Vector3[] LEVELS_COORDS = { new(-66, 22, -315), new(-50, 12, -20), new(80, 28, 342), new(-100, 72, 740), new(-100, 3, 1210) };
+    Vector3[] LEVELS_ROTATIONS = { new(0, 90, 0), new(0, 90, 0), new(0, -107, 0), new(0, 90, 0), new(0, 90, 0) };
 
     Vector3[] TOWER_EIFFEL_COORDS = { new(-34, 44, 1210), new(-10, 182, 1210) };
 
@@ -47,11 +48,11 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        TeleportPlayerToLevel(0);
+        TeleportPlayerToLevel(1);
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (!canMove)
         { 
@@ -89,55 +90,55 @@ public class PlayerController : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+    }
 
-        // Teleport player to the certain level if key is pressed
-        for (int i = 1; i <= LEVELS_COORDS.Length; ++i)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha0 + i))
-            {
-                TeleportPlayerToLevel(i - 1);
-            }
-        }
-
-
+    private void FixedUpdate()
+    {
         // Check if all coins for the current level are collected
-        if (Coin >= levelCoins[currentLevel-1])
+        if (Coin >= levelCoins[currentLevel - 1])
         {
-            Coin = 0; // Reset coin count for the next level
-
             // Check if there is a next level
             if (currentLevel < LEVELS_COORDS.Length)
             {
-                currentLevel++;
-                TeleportPlayerToLevel(currentLevel-1);
-                
-                Debug.Log("Player moved to Level " + (currentLevel));
+                TeleportPlayerToLevel(currentLevel + 1);
+                Debug.Log("Player moved to Level " + currentLevel);
             }
             else
             {
+                Coin = 0;
                 Debug.Log("All levels completed!");
             }
         }
         
 
-        if(currentLevel == 5 && currentTowerLevel == 0 && Coin == towerEiffelLevelsCoins[currentTowerLevel])
+        if (currentLevel == 5 && currentTowerLevel < 2 && Coin == towerEiffelLevelsCoins[currentTowerLevel])
         {
             TeleportPlayerToLevelEiffel(currentTowerLevel);
-            currentTowerLevel++;
+            if (currentTowerLevel == 2)
+            {
+                // When player reaches the top of the Eiffel Tower, move camera lower
+                playerCamera.transform.localPosition = new Vector3(0, 0.6f, 0);
+            }
         }
-
-        if (currentLevel == 5 && currentTowerLevel == 1 && Coin == towerEiffelLevelsCoins[currentTowerLevel])
+        
+        // Teleport player to the certain level if key is pressed
+        for (int i = 1; i <= LEVELS_COORDS.Length; ++i)
         {
-            TeleportPlayerToLevelEiffel(currentTowerLevel);
-            currentTowerLevel++;
+            if (Input.GetKeyDown(KeyCode.Alpha0 + i))
+            {
+                TeleportPlayerToLevel(i);
+            }
         }
     }
 
     void TeleportPlayerToLevel(int level)
     {
-        var coords = LEVELS_COORDS[level];
-        var rotation = LEVELS_ROTATIONS[level];
+        var coords = LEVELS_COORDS[level - 1];
+        var rotation = LEVELS_ROTATIONS[level - 1];
         transform.SetPositionAndRotation(coords, Quaternion.Euler(rotation));
+        currentLevel = level;
+        currentTowerLevel = 0;
+        Coin = 0;
     }
 
     void TeleportPlayerToLevelEiffel(int level)
@@ -145,15 +146,14 @@ public class PlayerController : MonoBehaviour
         var coords = TOWER_EIFFEL_COORDS[level];
         Vector3 rotation = new Vector3(0, 90, 0);
         transform.SetPositionAndRotation(coords, Quaternion.Euler(rotation));
+        currentTowerLevel = level + 1;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform.tag == "Coin")
-        {
-            Coin++;
-            Debug.Log(Coin);
-            Destroy(other.gameObject);
-        }
+        if (!other.transform.CompareTag("Coin")) return;
+        Coin++;
+        Debug.Log($"Collected {Coin} coins!");
+        Destroy(other.gameObject);
     }
 }
