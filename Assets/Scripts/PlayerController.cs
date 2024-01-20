@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour
     private int currentLevel = 1;
     private int currentTowerLevel = 0;
 
+    public SkyManager skyManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -139,6 +141,7 @@ public class PlayerController : MonoBehaviour
         currentLevel = level;
         currentTowerLevel = 0;
         Coin = 0;
+        skyManager.SetSkybox(level - 1);
     }
 
     void TeleportPlayerToLevelEiffel(int level)

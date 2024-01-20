@@ -25,8 +25,8 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubtractiveShadowColor: {r: 0, g: 0.70869833, b: 0.8490566, a: 1}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 8dd2f17b6e3f8174390967bc55ead836, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.4909045, g: 0.6818155, b: 0.7859519, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8015,6 +8015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: DirectionalLight
   m_TagString: Untagged
@@ -8099,6 +8100,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b309113758d4c9491764ca997af858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.5
+  skyboxes:
+  - {fileID: 2100000, guid: 44d0573bf6d91e447b62f3aff840f2ae, type: 2}
+  - {fileID: 2100000, guid: 87567e7d36a377546a61db55aebf554c, type: 2}
+  - {fileID: 2100000, guid: 3a253cab252a165478338fba0f03e63a, type: 2}
+  - {fileID: 2100000, guid: 56c9ed5ee739a324e8d8bdb9613f4890, type: 2}
+  - {fileID: 2100000, guid: aed657681c6812845bb7736c343b5e9b, type: 2}
 --- !u!1001 &715136715
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20382,8 +20402,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543909015}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.09364167, y: -0.8958235, z: -0.22794776, w: 0.36982626}
-  m_LocalPosition: {x: 160.09914, y: 19.000114, z: -606.05286}
+  m_LocalRotation: {x: 0.5217692, y: -0.32325867, z: -0.22220366, w: -0.7575528}
+  m_LocalPosition: {x: 135.60254, y: -96.63581, z: -947.00183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21586,6 +21606,7 @@ MonoBehaviour:
   lookSpeed: 4
   lookXLimit: 45
   canMove: 1
+  skyManager: {fileID: 705507996}
 --- !u!143 &1604245368
 CharacterController:
   m_ObjectHideFlags: 0
