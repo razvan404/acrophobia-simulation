@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour
     public SkyManager skyManager;
 
 
+    public EndScript endScript;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -109,6 +112,7 @@ public class PlayerController : MonoBehaviour
             {
                 Coin = 0;
                 Debug.Log("All levels completed!");
+                EndSimulation();
             }
         }
         
@@ -158,5 +162,10 @@ public class PlayerController : MonoBehaviour
         Coin++;
         Debug.Log($"Collected {Coin} coins!");
         Destroy(other.gameObject);
+    }
+
+    public void EndSimulation()
+    {
+        endScript.Setup();
     }
 }
