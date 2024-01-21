@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -12,6 +8,9 @@ public class PlayerController : MonoBehaviour
     Vector3[] LEVELS_ROTATIONS = { new(0, 90, 0), new(0, 90, 0), new(0, -107, 0), new(0, 90, 0), new(0, 90, 0) };
 
     Vector3[] TOWER_EIFFEL_COORDS = { new(-34, 44, 1210), new(-10, 182, 1210) };
+
+    private Vector3 FINAL_COORDS = new(100, 1, 1010);
+    private Vector3 FINAL_ROTATION = new(0, -40, 0);
 
     public Camera playerCamera;
     public float walkSpeed = 6.0f;
@@ -166,6 +165,8 @@ public class PlayerController : MonoBehaviour
 
     public void EndSimulation()
     {
+        canMove = false;
+        playerCamera.transform.SetPositionAndRotation(FINAL_COORDS, Quaternion.Euler(FINAL_ROTATION));
         endScript.Setup();
     }
 }
